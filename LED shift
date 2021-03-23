@@ -1,0 +1,87 @@
+#define F_CPU 7372800UL						//cpu 클럭
+#define __DELAY_BACKWARD_COMPATIBLE__		//_delay ms()에 변수를 집어 넣기 위함이다
+#include<avr/io.h>						   
+#include<util/delay.h>						//시간 지연 함수용 헤더파일 (클럭을 쓰기 위한 정의 필요)
+
+
+
+
+unsigned char pattern[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};	//LED 배열
+unsigned char pattern_accumulated[8] = {0x01,0x03,0x07,0x0F,0x1F,0x3F,0x7F,0xFF};	//LED 누적 배열
+
+
+int main()
+{
+	int i=0;
+	int t=0;
+	int even_odd=1;								//2번에서 스위치 입력 횟수 홀수 짝수 받아줄 변수
+	DDRA = 0xFF;								//포트 A를 출력으로 설정
+	DDRD = 0x00;								//포트 D를 입력으로 설정
+	PORTA = 0xFF;								//초기 값이 0이라 꺼짐상태로 만듬
+	
+	while (1)									//무한루프 생성
+	{
+		if((~PIND & 0x0F)==0x01)				//스위치 1번이 눌리면 실행
+		{
+			_delay_ms(50);						//시간 지연 (채터링 방지)
+			for(i=0; i<=7; i++)
+			{									//우에서 좌로
+				PORTA = ~pattern[i];				
+				_delay_ms(500);					//시간지연
+			}
+			for(i=7; i>=0; i--)					//좌에서 우로
+			{
+				PORTA = ~pattern[i];
+				_delay_ms(500);					//시간지연
+			}
+		}
+		//홀수 LED는 0xAA, 짝수 LED는 0x55
+		else if((~PIND&0x0F)==0x02)				//스위치 2번이 눌리면 실행
+		{
+			_delay_ms(200);						//시간 지연 (채터링 방지)
+			if(even_odd%2==0)
+			{									//t의 초기값은 1 홀수번이 켜짐 even_odd++
+				PORTA= 0xAA;					//그 후 t는 2가 되어서 짝수번이 켜짐 even_odd++ 반복
+				even_odd++;
+			}
+			else
+			{
+				PORTA=0x55;
+				even_odd++;
+			}
+			
+		}
+		else if((~PIND&0x0F)==0x04)				//스위치 3번이 눌리면 실행
+		{
+			while((~PIND&0x0F)==0x04)			//스위치가 눌러지는 동안 실행
+			{
+					PORTA = ~pattern[i];	 
+					_delay_ms(t+=50);		 	//점점 딜레이 증가
+					i++;
+					if(i==8)					//8번째 LED가 켜졌을 시 1번으로 초기화
+					{
+						i=0;
+					}
+					
+					
+			}
+			
+		}
+		else if((~PIND&0x0F)==0x08)					//스위치 4번이 눌리면 실행
+		{
+			while((~PIND&0x0F)==0x08)				//스위치가 눌러지는 동안 실행
+			{
+				PORTA = ~pattern_accumulated[i];	//LED 누적
+				_delay_ms(100);
+				i++;
+				if(i==8)							//8번째 LED가 켜졌을 시 1번으로 초기화
+				{
+					i=0;
+				}
+			}
+		}
+		
+		
+		
+	}
+}
