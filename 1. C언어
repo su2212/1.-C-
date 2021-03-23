@@ -1,0 +1,499 @@
+<font class="papago-parent"><font class="papago-source" style="display:none;">#include<stdio.</font>#no.</font><font class="papago-parent"><font class="papago-source" style="display:none;">h>//헤더파일 포함
+</font>h>//헤더파일 포함
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">#include<stdlib.</font>##수상한.</font><font class="papago-parent"><font class="papago-source" style="display:none;">h>//rand()의 원형
+</font>h>//rand()의 원형
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">#include<time.</font>######시간.</font><font class="papago-parent"><font class="papago-source" style="display:none;">h>//time()의 원형 h는 확장자
+</font>h>//time()의 원형 h는 확장자
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">#define SIZE 5
+</font>#SIZE 5 정의
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">int get_result(int a, int b, char c);</font>int get_int(int a, int b, char c);</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">int sandclock(void)
+</font>모래 시계(오전)에
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">{
+</font>{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	int a,q;
+</font>	a,q;에.
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	int b, c, d;									//모래시계 상단 변수
+</font>	int b, c, d;									//모래시계 상단 변수
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	int e, f, g;									//모래시계 하단 변수
+</font>	int e, f, g;									//모래시계 하단 변수
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	int half = 0;
+</font>	int 절반 = 0;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	while (1)									//무한루프 사용
+</font>	while (1)									//무한루프 사용
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	{
+</font>	{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("모래시계를 몇줄로 만드실겁니까?</font>		printf("모래시계를 몇줄로 만드실겁니까?</font><font class="papago-parent"><font class="papago-source" style="display:none;">:");
+</font>:");
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		scanf_s("%d", &a);
+</font>		scanf_s("%d", &a);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		if (a % 2 == 0)								//입력 변수가 짝수 일 경우
+</font>		if (a % 2 == 0)								//입력 변수가 짝수 일 경우
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		{
+</font>		{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			half = a / 2;
+</font>			절반 = a / 2;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">											//왼쪽 위 사다리
+</font>											//왼쪽 위 사다리
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			for (b = 1; b <= half; b++)					//짝수의 반만큼 반복
+</font>			for (b = 1; b <= half; b++)					//짝수의 반만큼 반복
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			{
+</font>			{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (d = 0; d < b; d++)					//위에 for문이 b=1이기 때문에 한번 작동
+</font>				for (d = 0; d < b; d++)					//위에 for문이 b=1이기 때문에 한번 작동
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				{
+</font>				{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					printf(" ");					//한번 띄워쓰기 띄워쓰기는 점점 증가
+</font>					printf(" ");					//한번 띄워쓰기 띄워쓰기는 점점 증가
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				}
+</font>				}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (c = half + 1; c > b; c--)				//별표는 점점 감소
+</font>				for (c = half + 1; c > b; c--)				//별표는 점점 감소
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				{
+</font>				{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					printf("*");						
+</font>					printf("*";						
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				}							//오른쪽 사다리
+</font>				}							//오른쪽 사다리
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (c = half + 1; c > b; c--)				//별표 점점 감소
+</font>				for (c = half + 1; c > b; c--)				//별표 점점 감소
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				{
+</font>				{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					printf("*");						
+</font>					printf("*";						
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				}
+</font>				}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				printf("\n");						//1사분면 사다리 2사분면 사다리 한줄씩 만들고 줄넘김
+</font>				printf("\n");						//1사분면 사다리 2사분면 사다리 한줄씩 만들고 줄넘김
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			}								
+</font>			}								
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			for (b = 1; b <= half; b++)					//왼쪽 밑 사다리 
+</font>			for (b = 1; b <= half; b++)					//왼쪽 밑 사다리 
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			{								//짝수의 반만큼 반복 
+</font>			{								//짝수의 반만큼 반복 
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (e = half + 1; e > b; e--)				//띄워쓰기 점점 감소
+</font>				for (e = half + 1; e > b; e--)				//띄워쓰기 점점 감소
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				{
+</font>				{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					printf(" ");					
+</font>					printf(" ";;					
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				}
+</font>				}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (f = 0; f < b; f++)
+</font>				(f = 0; f < b; f++)의 경우
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				{							//별표 점점 증가
+</font>				{							//별표 점점 증가
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					printf("*");
+</font>					printf("*";
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				}
+</font>				}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (g = 0; g < b; g++)					//별표 점점 증가
+</font>				for (g = 0; g < b; g++)					//별표 점점 증가
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				{
+</font>				{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					printf("*");
+</font>					printf("*";
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				}
+</font>				}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				printf("\n");						//3사분면 사다리 4사분면 사다리 한줄씩 만들고 줄넘김
+</font>				printf("\n");						//3사분면 사다리 4사분면 사다리 한줄씩 만들고 줄넘김
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			}
+</font>			}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		}
+</font>		}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		else
+</font>		다른
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		{
+</font>		{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			half = a / 2;
+</font>			절반 = a / 2;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">											//입력 변수가 홀수 일 경우
+</font>											//입력 변수가 홀수 일 경우
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			for (b = 1; b <= half+1; b++)					/왼쪽 위 사다리
+</font>			for (b = 1; b <= half+1; b++)					/왼쪽 위 사다리
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			{								//2로 나눠준 후 +1번 해준다 ex)7/2+1=4 
+</font>			{								//2로 나눠준 후 +1번 해준다 ex)7/2+1=4 
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (d = 0; d < b; d++)					//위에 for문이 b=1이기 때문에 한번 작동
+</font>				for (d = 0; d < b; d++)					//위에 for문이 b=1이기 때문에 한번 작동
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				{
+</font>				{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					printf(" ");					//한번 띄워쓰기 띄워쓰기 점점 증가
+</font>					printf(" ");					//한번 띄워쓰기 띄워쓰기 점점 증가
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				}
+</font>				}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (c = half + 2; c > b; c--)				//별표 점점 감소 half+1에 +2 해주므로 별표 6개
+</font>				for (c = half + 2; c > b; c--)				//별표 점점 감소 half+1에 +2 해주므로 별표 6개
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				{
+</font>				{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					printf("*");						//결국 b와c가 같아지면 작동 멈춤
+</font>					printf("*");						//결국 b와c가 같아지면 작동 멈춤
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				}											
+</font>				}											
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (c = half + 1; c > b; c--)				//오른쪽 사다리
+</font>				for (c = half + 1; c > b; c--)				//오른쪽 사다리
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				{							//별표 점점 증가 half+1에 +1 해주므로 별표 5
+</font>				{							//별표 점점 증가 half+1에 +1 해주므로 별표 5
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					printf("*");						
+</font>					printf("*";						
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				}
+</font>				}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				printf("\n");						//1사분면 사다리 2사분면 사다리 한줄씩 만들고 줄넘김
+</font>				printf("\n");						//1사분면 사다리 2사분면 사다리 한줄씩 만들고 줄넘김
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			}
+</font>			}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			
+</font>			
+			
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			for (b = 0; b < half; b++)					// 7/2=3  3번 실행 
+</font>			(b = 0; b < 절반; b++) // 7/2=3 번 
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			{
+</font>			{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (e = half; e > b; e--)				//왼쪽 밑 사다리
+</font>				for (e = half; e > b; e--)				//왼쪽 밑 사다리
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				{							//띄워쓰기 3번 실행 후 점점 감소
+</font>				{							//띄워쓰기 3번 실행 후 점점 감소
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					printf(" ");
+</font>					printf(" ";;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				}
+</font>				}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (f = 0; f < b + 2; f++)				//별표 1번 실행 후 점점 증가
+</font>				for (f = 0; f < b + 2; f++)				//별표 1번 실행 후 점점 증가
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				{
+</font>				{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					printf("*");
+</font>					printf("*";
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				}
+</font>				}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (g = 0; g < b + 1; g++)				//오른쪽 밑 사다리
+</font>				for (g = 0; g < b + 1; g++)				//오른쪽 밑 사다리
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				{
+</font>				{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					printf("*");					//별표 점점 증가
+</font>					printf("*");					//별표 점점 증가
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				}
+</font>				}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				printf("\n");						//3사분면 사다리 4사분면 사다리 한줄씩 만들고 줄넘김
+</font>				printf("\n");						//3사분면 사다리 4사분면 사다리 한줄씩 만들고 줄넘김
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			}
+</font>			}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		}
+</font>		}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("계속 하시겠습니까?(1.계속 2.종료)");	
+</font>		printf("계속 하시겠습니까?(1.계속 2.종료)");	
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		scanf_s("%d", &q);
+</font>		scanf_s("%d", &q);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		if (q == 1)								//1을 입력 시 반복
+</font>		if (q == 1)								//1을 입력 시 반복
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			continue;
+</font>			계속해서;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		else
+</font>		다른
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			break;								//아닐 시 메인문 무한루프 반복
+</font>			break;								//아닐 시 메인문 무한루프 반복
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	}
+</font>	}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	return 0;
+</font>	반환 0;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">}
+</font>}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">int alignment(void)
+</font>정렬 상태(정렬 상태(계속)
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">{									 
+</font>{									 
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">								
+</font>								
+								
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	int random[</font>	아무렇게나[아무렇게나]</font><font class="papago-parent"><font class="papago-source" style="display:none;">SIZE] = { rand(), rand(),  rand(),  rand(), rand() };		//배열 안에 랜덤 값 5개 부여
+</font>SIZE] = { rand(), rand(),  rand(),  rand(), rand() };		//배열 안에 랜덤 값 5개 부여
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	int a, b, c, d, i, j,w, highest, least, temp;
+</font>	a, b, c, d, i, j,w, 가장 높은 온도, 최소 온도,
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	srand((unsigned)time(NULL));							//컴퓨터 시각으로 시드값 설정
+</font>	srand((unsigned)time(NULL));							//컴퓨터 시각으로 시드값 설정
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	while (1)									//무한 루프
+</font>	while (1)									//무한 루프
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	{ 
+</font>	{ 
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		{
+</font>		{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("1번을 누르면 오름차순입니다.</font>		printf("1번을 누르면 오름차순입니다.</font><font class="papago-parent"><font class="papago-source" style="display:none;">\n2번을 누르면 내림차순입니다.\n");
+</font>\n2번을 누르면 내림차순입니다.\n");
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		scanf_s("%d", &a);
+</font>		scanf_s("%d", &a);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		if (a == 1)								//1을 누를 시 오름차순
+</font>		if (a == 1)								//1을 누를 시 오름차순
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		{
+</font>		{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			for (i = 0; i < SIZE; i++)                    		 	//5번 실행
+</font>			(i = 0; i < SIZE; i++) //55 실행
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			{			
+</font>			{			
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				least = i;						//최소 값에 i를 넣어준다
+</font>				least = i;						//최소 값에 i를 넣어준다
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				for (j = i + 1; j < SIZE; j++)				//j는 1이고 밑의 코드를 4번 반복 4번째 비교후 마지막 숫자는 자동으로 제일 큰 수
+</font>				for (j = i + 1; j < SIZE; j++)				//j는 1이고 밑의 코드를 4번 반복 4번째 비교후 마지막 숫자는 자동으로 제일 큰 수
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					if (random[j] < random[least])			//배열인덱스1번(j)ex1 보다 배열인덱스 0번(i)ex2이 크면
+</font>					if (random[j] < random[least])			//배열인덱스1번(j)ex1 보다 배열인덱스 0번(i)ex2이 크면
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">						least = j;				//최소값에(0번)>(1번) i에서 j로 변경  ex2 > ex 1로 변경
+</font>						least = j;				//최소값에(0번)>(1번) i에서 j로 변경  ex2 > ex 1로 변경
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				temp = random[i];					//배열인덱스 0(i) 번에 있던 숫자를잠시 temp에  에 옮기고
+</font>				temp = random[i];					//배열인덱스 0(i) 번에 있던 숫자를잠시 temp에  에 옮기고
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				random[i] = random[least];				//배열인덱스 0번에  기존의 배열인덱스 1번(j)를 넣어주고
+</font>				random[i] = random[least];				//배열인덱스 0번에  기존의 배열인덱스 1번(j)를 넣어주고
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				random[least] = temp;					//배열인덱스 1번에  기존의 배열인덱스 0번(i)를 넣어준다 
+</font>				random[least] = temp;					//배열인덱스 1번에  기존의 배열인덱스 0번(i)를 넣어준다 
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			}
+</font>			}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			for (i = 0; i < SIZE; i++)					//5번 표기하는건데 위에 for문반복5번 후
+</font>			for (i = 0; i < SIZE; i++)					//5번 표기하는건데 위에 for문반복5번 후
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				printf("%d\n", random[i]);				//인덱스0번 부터 하나씩 표시하는걸 여기 for 문에서 5번 반복
+</font>				printf("%d\n", random[i]);				//인덱스0번 부터 하나씩 표시하는걸 여기 for 문에서 5번 반복
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			printf("\n");							
+</font>			printf("\n";							
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			return 0;							//인덱스1이 인덱스 0보다 값이 작으면 인덱스 1의 값이
+</font>			return 0;							//인덱스1이 인덱스 0보다 값이 작으면 인덱스 1의 값이
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		}									//인덱스 0의 값으로 들어감
+</font>		}									//인덱스 0의 값으로 들어감
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		else if(a == 2);
+</font>		그렇지 않은 경우(a == 2);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		for (c = 0; c < SIZE; c++)
+</font>		(c = 0; c < SIZE; c++)의 경우
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		{
+</font>		{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			highest = c;							//같은건데 부등호만 반대로 해주면
+</font>			highest = c;							//같은건데 부등호만 반대로 해주면
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			for (d = c + 1; d < SIZE; d++)					//인덱스0번 보다 인덱스1번이 크면 
+</font>			for (d = c + 1; d < SIZE; d++)					//인덱스0번 보다 인덱스1번이 크면 
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">				if (random[d] > random[highest])			//인덱스1번이 인덱스 0으로 들어감
+</font>				if (random[d] > random[highest])			//인덱스1번이 인덱스 0으로 들어감
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">					highest = d;					//내림차순
+</font>					highest = d;					//내림차순
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			temp = random[c];</font>			온도 = 랜덤[c];</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			random[c] = random[highest];</font>			랜덤[c] = 랜덤[최고];</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			random[highest] = temp;
+</font>			랜덤[최고] = 온도;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		}
+</font>		}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		for (i = 0; i < SIZE; i++)
+</font>		(i = 0; i < SIZE; i++)의 경우
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			printf("%d\n", random[i])</font>			printf("%d\n", 랜덤[i]</font><font class="papago-parent"><font class="papago-source" style="display:none;">;
+</font>;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("\n");</font>		printf("\n";</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	}
+</font>	}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		
+</font>		
+		
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("계속 하시겠습니까?(1.계속 2.종료)");</font>		printf("계속 하시겠습니까?(1.계속 2.종료)");</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		scanf_s("%d", &w);
+</font>		scanf_s("%d", &w);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		if (w == 1)
+</font>		if (w == 1)이면
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			continue;
+</font>			계속해서;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		else
+</font>		다른
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			break;
+</font>			방학.
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	}
+</font>	}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	return 0;
+</font>	반환 0;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">}
+</font>}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">int calculator(void)
+</font>int calculator(계측기)
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">{
+</font>{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	int a, b,r, re;
+</font>	a, b,r, re;에.
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	char c = 0;
+</font>	char c = 0;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	while (1)
+</font>	(1) 동안
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	{
+</font>	{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("첫번째 정수를 입력해주시오 :");
+</font>		printf("첫번째 정수를 입력해주시오 :");
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		scanf_s("%d", &a);
+</font>		scanf_s("%d", &a);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("두번째 정수를 입력해주시오 :");
+</font>		printf("두번째 정수를 입력해주시오 :");
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		scanf_s("%d", &b);
+</font>		scanf_s("%d", &b);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		rewind(stdin);</font>		되감기(stdin);</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("연산자를 입력해주시오 :");
+</font>		printf("연산자를 입력해주시오 :");
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		scanf_s("%c", &c);
+</font>		scanf_s("%c", &c);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		re = get_result(a, b, c);
+</font>		re = get_message(a, b, c);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("두 정수의 결과 값은:%d입니다.\n", re);
+</font>		printf("두 정수의 결과 값은:%d입니다.\n", re);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("계속 하시겠습니까?(1.계속 2.종료)");</font>		printf("계속 하시겠습니까?(1.계속 2.종료)");</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		scanf_s("%d", &r);
+</font>		scanf_s("%d", &r);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		if (r == 1)
+</font>		if (r == 1)이면
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			continue;
+</font>			계속해서;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		else
+</font>		다른
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			break;
+</font>			방학.
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	
+</font>	
+	
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	}
+</font>	}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	return 0;
+</font>	반환 0;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">}
+</font>}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">int get_result(int a, int b, char c)
+</font>int get_int(int a, int b, char c)
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">{
+</font>{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	int result = 0;
+</font>	int 결과 = 0;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	if (c == '+')
+</font>	if (c == '+')이면
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		result = ("%d + %d = %d\n", a, b, a + b);</font>		결과 = ("%d + %d = %d\n", a, b, a + b);</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	else if (c == '-')                               //여기서 산술계산기
+</font>	else if (c == '-')                               //여기서 산술계산기
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		result = ("%d - %d = %d\n", a, b, a - b);
+</font>		결과 = ("%d - %d = %d\n", a, b, a - b);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	else if (c == '*')
+</font>	그렇지 않은 경우(c == '*')
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		result = ("%d * %d = %d\n", a, b, a * b);
+</font>		결과 = ("%d * %d = %d\n", a, b, * b);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	else if (c == '/')
+</font>	그렇지 않은 경우(c == '/')
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		result = ("%d / %d = %d\n", a, b, a / b);
+</font>		결과 = ("%d / %d = %d\n", a, b, a /b);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	return result;
+</font>	결과를 반환한다.
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">}
+</font>}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">int main(void)
+</font>메인(메인)에
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">{
+</font>{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	
+</font>	
+	
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		int a;
+</font>		a에;에;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		while (1)
+</font>		(1) 동안
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		{
+</font>		{
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("******************************************\n");</font>		printf("***********************************************</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("실행 할 프로그램의 번호를 누르시오.\n");
+</font>		printf("실행 할 프로그램의 번호를 누르시오.\n");
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("1번 모래시계 2번 정렬 3번 계산기 4번 취소\n");</font>		printf("1번 모래시계 2번 정렬 3번 계산기 4번 취소\n");</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		printf("******************************************");
+</font>		printf("******************************************"
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		scanf_s("%d", &a);
+</font>		scanf_s("%d", &a);
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">
+</font>
+
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		if (a == 1)
+</font>		if (a == 1)이면
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			sandclock();
+</font>			모래 시계();
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		else if (a == 2)
+</font>		그렇지 않으면 (a == 2)
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			alignment();
+</font>			정렬();
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		else if (a == 3)
+</font>		또는 (a == 3)인 경우
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			calculator();
+</font>			계산기();
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		else if (a == 4)
+</font>		또는 (a ==4)인 경우
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			break;
+</font>			방학.
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">		else
+</font>		다른
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">			continue;
+</font>			계속해서;
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">	}
+</font>	}
+</font><font class="papago-parent"><font class="papago-source" style="display:none;">}
+</font>}
+</font>
