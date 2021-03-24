@@ -1,0 +1,62 @@
+#define F_CPU 7372800UL
+#include<avr/io.h>
+#include<avr/interrupt.h>
+#include<util/delay.h>
+
+unsigned char FND[10]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};  //0~9
+volatile int i;
+
+
+void FND_NUM()	
+{
+   for(i=0;i<99;i++)	//0에서 99까지
+   {
+	  for(int j=0;j<5;j++)	//딜레이를 주는 조건 반복문
+	  {
+      PORTD = 0x10; //PD4
+      PORTC=~FND[(i%100)/10]; //10의 자리 몫
+      _delay_ms(10);
+      PORTD = 0x20; //PD5번
+      PORTC=~FND[(i%10)/1]; //1의 자리
+      _delay_ms(10);
+	 }
+   }  
+}
+
+ISR(INT0_vect) //0번 스위치를 LED 1번 점등
+{
+	PORTA = ~0x01;
+}
+ 
+ISR(INT1_vect) //1번 스위치를  LED 2번 점등
+{
+	PORTA = ~0x02;
+}
+
+int main()
+{
+	DDRA=0xff; //LED 출력
+	DDRC=0xFF; //포트C를 출력으로 설정(FND)
+	DDRD=0x30; //포트D를 입력으로 설정(스위치)/ (PD4,PD5) 출력
+	
+	PORTC=~0x00; //FND를 00으로 초기화
+	PORTA=~0x00; //LED 초기화
+	
+	EICRA=0xAA; //외부 인터럽트 제어 레지스터 하강 엣지 1010 1010 PD0/1/2/3
+	EIMSK=0x03; //외부 인터럽트 0,1번 인터럽트 사용 
+   
+	sei();      //전역 인터럽트허용
+   
+	while(1)
+	{
+		FND_NUM();           //FND 무한으로 0~99까지 점등
+		if((~PIND&0x0c)==0x04)//폴링 방식으로 FND 순환 한번 끝날 시 스위치3번을 누르면 LED 3번 점등
+		{
+			PORTA=~0x04;
+		}
+		else if((~PIND&0x0c)==0x08)
+		{
+			PORTA=~0x08;  //폴링 방식으로 FND 순환 한번 끝날 시 스위치4번을 누르면 LED 4번 점등       
+		}
+	}  
+}
