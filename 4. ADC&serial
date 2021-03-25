@@ -1,0 +1,106 @@
+#define F_CPU 7372800UL
+#include<avr/io.h>
+#include<util/delay.h>
+
+void serial_Init(unsigned long boud)
+{
+	unsigned short ubrr;						//보레이트 설정
+	ubrr=(unsigned short)(F_CPU/(16*boud)-1);	//UBRRn 비동기 표준모드 계산식 클록 위에 설정
+	UBRR0H = (unsigned char)(ubrr>>8);			//보레이트 레지스터 상위 4비트
+	UBRR0L = (unsigned char) ubrr;				//보레이트 레지스터 하위 8비트
+	
+	UCSR0B = (1<<RXEN0) | (1<<TXEN0);			//RX수신부 가능,TX 송신부 가능
+	UCSR0C = (3<<UCSZ00);						//비동기 모드, 패리티 불능, 정지 1비트, 문자크기 8비트
+}
+void ADC_INit()
+{
+	ADMUX=0xC0;									//내부 2.56V 기준전압 사용,오른쪽 정렬,싱글엔드 입력
+	ADCSRA=0xE7;								//ADC가능,ADC변환시작,ADC Free Running Mode, 인터럽트플래그,인터럽트허용 안함,프리스케일러128
+}
+void tx_data(unsigned char data)				//송신 함수
+{
+	while (!(UCSR0A & (1<<UDRE)));				//UDRE를 검사후 비어있지 않으면 while문 반복(송신 버퍼가 빌 때까지 기다림)
+	UDR0 = data;								//입출력 데이터 레지스터에 data를 넣어줌(버퍼에 문자를 쓴다.)
+}
+void tx_string(char*str_data)
+{
+	while(*str_data !='\0')						//문자열의 끝이 아니면 반복한다.
+	{
+		tx_data(*str_data++);					//str에 저장된 문자열 송신 증가하여 다음 문자열 송신
+	}
+}
+int main(void)
+{
+	DDRA=0xFF;									//LED 출력
+	DDRD=0x00;									//스위치 입력으로 설정
+	DDRF=0x00;									//입력포트로 설정(조도센서)
+	
+	PORTA= ~0x00;								//LED끔
+	unsigned int div,data,data2=0;				//Division
+	char flag;
+	ADC_INit();
+	serial_Init(9600);							//BAUD 9600 UBRRn 103
+	while(1)
+	{
+		if(!(UCSR0A & 0x80)==0x80)	data2= UDR0;//수신 완료 시 UDR0의 값을 data2에 넣어준다
+		
+		if((~PIND&0x01)==0x01)		flag =1;
+		else if((~PIND&0x02)==0x02)	flag = 2;
+		else if((~PIND&0x04)==0x04)	flag = 3;
+		else if((~PIND&0x08)==0x08)	flag = 4;
+		
+		if(flag==1)
+		{
+			data2= UDR0;
+			
+			if(data2=='1') PORTA=~0x01;
+			
+			else if(data2=='2') PORTA=~0x02;
+			
+			else if(data2=='3') PORTA=~0x04;
+
+			else if(data2=='4') PORTA=~0x08;
+
+			else if(data2=='5') PORTA=~0x10;
+			
+			else if(data2=='6') PORTA=~0x20;
+
+			else if(data2=='7') PORTA=~0x40;
+
+			else if(data2=='8') PORTA=~0x80;
+		}
+		if(flag==2)
+		{
+			unsigned char *str="micro processor";	//포인터 선언
+			tx_string(str);
+			tx_data(0x0D);							// 줄바꿈 
+			_delay_ms(50);
+		}
+		if(flag==3)
+		{
+			data=ADC;								//cds의 ADC 값을 데이터에 대입
+			tx_data((data%10000)/1000+'0');			//문자화
+			tx_data((data%1000)/100+'0');
+			tx_data((data%100)/10+'0');
+			tx_data((data%10)/1+'0');
+			tx_data(0x0D);							// 줄바꿈 
+			_delay_ms(50);
+		}
+		if(flag==4)
+		{
+			data=ADC;
+			div=1024/8;
+			{
+				if (ADC<div)	      PORTA=~0x01;	//ADC가 128보다 작을 경우 LED1개 점등
+				else if((ADC<(div*2)) PORTA=~0x03;	//ADC가 356보다 작을 경우 LED2개 점등
+				else if((ADC<(div*3)) PORTA=~0x07;
+				else if((ADC<(div*4)) PORTA=~0x0F;
+				else if((ADC<(div*5)) PORTA=~0x1F;
+				else if((ADC<(div*6)) PORTA=~0x3F;
+				else if((ADC<(div*7)) PORTA=~0x7F;
+				else if((ADC<(div*8)) PORTA=~0xFF;
+			}
+		}
+	}
+	
+}
