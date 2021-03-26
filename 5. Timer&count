@@ -1,0 +1,100 @@
+#define F_CPU 7372800UL
+#include <avr/io.h>
+#include <stdio.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
+volatile int n=2121;
+volatile char flag=0;
+char mess[100]={0};
+
+void serial_Init(unsigned long boud)
+{
+	unsigned short ubrr;					//보레이트 설정
+	ubrr=(unsigned short)(F_CPU/(16*boud)-1);		//UBRRn 비동기 표준모드 계산식 클록 위에 설정
+	UBRR0H = (unsigned char)(ubrr>>8);			//보레이트 레지스터 상위 4비트
+	UBRR0L = (unsigned char) ubrr;				//보레이트 레지스터 하위 8비트
+	
+	UCSR0B = (1<<RXEN0) | (1<<TXEN0);			//RX수신부 가능,TX 송신부 가능
+	UCSR0C = (3<<UCSZ00);					//비동기 모드, 패리티 불능, 정지 1비트, 문자크기 8비트
+}
+void tx_data(unsigned char data)						//송신 함수
+{
+	while (!(UCSR0A & (1<<UDRE)));						//UDRE를 검사후 비어있지 않으면 while문 반복(송신 버퍼가 빌 때까지 기다림)
+	UDR0 = data;								//입출력 데이터 레지스터에 data를 넣어줌(버퍼에 문자를 쓴다.)
+}
+void tx_string(char*str)
+{
+	while(*str !='\0')							//문자열의 끝이 아니면 반복한다.
+	{
+		tx_data(*str++);						//str에 저장된 문자열 송신 증가하여 다음 문자열 송신
+	}
+}
+void set_timer_count()
+{										//타이머 설정
+	TCCR3A = 0x40;								//CTC모드, OCRn 상태 반전, TOP=ICRN
+	TCCR3B = 0x1D;								//분주비 1024
+	ICR3= 7200;									//(7372800/1024)*1sec
+	ETIMSK= 0x10;								//출력 비교일치 인터럽트 허용
+
+	
+										//서브모터 설정
+	TCCR1A = 0x82;								//COMnA1:0 1/0	WGMn1:0 1/0
+	TCCR1B = 0x1A;								//WGMn3:2 1/1  CSn2:0 0/1/0
+	ICR1 = 18432;								//(7372800/8)*20msec
+	OCR1A= 1370;								//초기 각도 설정
+}
+
+ISR(TIMER3_COMPA_vect)
+{
+	n-=246;									//30도 씩 감소
+	if(n<=644) n=2121;							//180도가 되면 0도로 초기화
+}
+int main(void)
+{
+	DDRD=0x00;								//입력포트 설정(스위치)
+	DDRB=0xff;								//출력포트 설정(서브모터,PB5)
+	
+	
+	int deg;
+	int i=0;
+	char flag=0;
+	unsigned int data=0;
+	
+	serial_Init(9600);
+	set_timer_count();
+	while(1)
+	{
+		if((~PIND&0x01)==0x01)
+		{
+			_delay_ms(1);
+			unsigned char *str="start";			//포인터 선언
+			tx_string(str);
+			tx_data(0x0D);					// 줄바꿈
+			flag =1;
+			sei();
+		}
+		else if((~PIND&0x02)==0x02)
+		{	
+			_delay_ms(1);
+			unsigned char *str="stop";			//포인터 선언
+			tx_string(str);
+			tx_data(0x0D);					// 줄바꿈
+			cli();
+		}
+		
+		if(flag==1)
+		{
+			OCR1A=n;
+			
+			deg=(OCR1A-645)/8;				//각도 값 계산 
+			if(deg>180) deg=180;
+			sprintf(mess,"%d\r",deg);
+			tx_string(mess);
+			_delay_ms(1000);				//타이머 인터럽트에 맞춰서 시간 설정
+			
+		}
+	
+		
+		
+	}
+}
