@@ -1,0 +1,151 @@
+#define F_CPU 7372800UL
+#include<avr/io.h>
+#include<util/delay.h>
+#include<avr/interrupt.h>
+
+volatile int n,flag,distance = 0;
+unsigned char arr[100]={0};
+int temp=0;
+
+void serial_Init(unsigned long baud)
+{
+	unsigned short ubrr;						//보레이트 설정
+	ubrr=(unsigned short)(F_CPU/(16*baud)-1);	//UBRRn 비동기 표준모드 계산식 설정
+	UBRR0H = (unsigned char)(ubrr>>8);			//보레이트 레지스터 상위 4비트
+	UBRR0L = (unsigned char) ubrr;;				//보레이트 레지스터 하위 8비트
+	UCSR0B = (1<<RXEN0) | (1<<TXEN0);			//RX수신부 가능,TX 송신부 가능
+	UCSR0C = (3<<UCSZ00);						//비동기 모드, 패리티 불능, 정지 1비트, 문자크기 8비트
+}
+void tx_data(unsigned char data)				//송신 함수
+{
+	while(!(UCSR0A & (1<<UDRE)));				//UDRE를 검사후 비어있지 않으면 while문 반복(송신 버퍼가 빌 때까지 기다림)
+	UDR0 = data;								//입출력 데이터 레지스터에 data를 넣어줌(버퍼에 문자를 쓴다.)
+}
+void tx_string(char*str_data)
+{
+	while(*str_data !='\0')						//문자열의 끝이 아니면 반복한다.
+	{
+		tx_data(*str_data++);					//str에 저장된 문자열 송신 증가하여 다음 문자열 송신
+	}
+}
+void Ultrasonic_set()
+{												//초음파 센서 설정
+	TCCR3A = 0x82;								//Fast PWM 모드 , 비교일치 시 OCN핀 0 TOP에서 1을 출력
+	TCCR3B = 0x1A;								//분주비 8, TOP = ICRn
+	ICR3 = 55927;								//(7372800/8)*0.06 초음파 시트 60ms이상 제안함
+	OCR3A = 10;									//(7372800/8)*10us
+	ETIMSK = 0x10;								//타이머카운터 3 비교일치 인터럽트 허용
+	
+	EICRB = 0x03;								//상승 모서리 인터럽트 요구
+	EIMSK = 0x10;								//INT4 인터럽트 허용
+}
+void DC_set()
+{
+	TCCR1A = 0x09;								//Fast PWM모드 8비트
+	TCCR1B = 0x05;								//분주 1024
+	OCR1C = 0;									//비교일치 레지스터 초기화
+}
+void LED_set()						
+{
+	if(temp<31) PORTA=~0x00;
+	else if(temp<(31*2)) PORTA=~0x01;
+	else if(temp<(31*3)) PORTA=~0x03;
+	else if(temp<(31*4)) PORTA=~0x07;
+	else if(temp<(31*5)) PORTA=~0x0F;
+	else if(temp<(31*6)) PORTA=~0x1F;
+	else if(temp<(31*7)) PORTA=~0x3F;
+	else if(temp<(31*8)) PORTA=~0x7F;
+	else if(temp<(31*9)) PORTA=~0xFF;
+	
+}
+ISR(TIMER3_COMPA_vect) //Trig
+{
+	PORTE=0x08;									//초음파 트리거 출력
+}
+ISR(INT4_vect)		//Echo
+{
+	if(n==0)
+	{
+		TCNT3 = 0;								//카운트 값 초기화
+		EICRB = 0x02;							//하강엣지 인터럽트 요구
+		n = 1;
+	}
+	else
+	{
+		distance = TCNT3 / 58;					//1cm = 58us
+		EICRB = 0x03;							//상승엣지 인터럽트 요구
+		n = 0;
+	}
+}
+
+int main(void)
+{
+	DDRA = 0xFF;								//LED 출력모드
+	DDRB = 0x80;								//PB7 출력 enable A 핀
+	DDRD = 0xc0;								//PD6, PD7 모터출력 input1,2 핀, 스위치 입력 설정
+	DDRE = 0x08;								//PE3(트리거)출력, PE4(에코)입력
+	
+	PORTA = ~0x00;								//LED 소등
+	PORTB = 0x80;								//모터드라이버 출력허용
+	
+	unsigned int key=0;
+	
+	Ultrasonic_set();
+	DC_set();
+	serial_Init(9600);
+	sei();
+	
+	while(1)
+	{
+		if((~PIND&0x01)==0x01) flag=1;
+		else if((~PIND&0x02)==0x02) flag=2;
+
+		if(flag==1)
+		{
+			tx_data((distance%1000)/100+'0');	//초음파 거리 표시
+			tx_data((distance%100)/10+'0');
+			tx_data((distance%10)+'0');
+			tx_data(0x0d);
+			_delay_ms(100);
+			if ((distance > 1)&&(distance < 10))// 1초과 10cm미만 시 역회전
+			{									//8비트 FAST PWM DC모터 설정 비교일치 레지스터
+				PORTD = 0x40;					//역방향 회전
+				OCR1C = 255;					//최대 속도
+			}
+			else if (distance == 10)			// 10cm 일 시 정지
+			{
+				PORTD = 0x00;
+				OCR1C = 0;
+			}
+			else if (distance > 10)				// 10cm 초과 시 정회전
+			{
+				PORTD = 0x80;					//정방향 회전
+				OCR1C = 255;					//최대 속도
+			}
+		}
+		if(flag==2)
+		{ 
+			if ((UCSR0A & 0x80)==0x80) key=UDR0;//버퍼에 수신 받지 않은 데이터가 있을 경우 UDR0의 값을 key에 넣어준다
+			if(key == '+')						//+키 입력시 속도 증가,LED점등
+			{	
+				temp+=31;						//31씩 속도 증가
+				if(temp>249) temp = 0;  
+				OCR1C=temp;
+				sprintf(arr,"%d\r",temp);		//OCR1C의 속도 값 표시
+				tx_string(arr);
+				LED_set();						
+				key = 0;
+			}
+			else if(key =='-')					//-키 입력시 속도 감소,LED소등
+			{
+				temp-=31;						//31씩 속도 감소
+				if(temp<0) temp=248;
+				OCR1C=temp;
+				sprintf(arr,"%d\r",temp);
+				tx_string(arr);
+				LED_set();
+				key = 0;
+			}
+		}
+	}
+}
