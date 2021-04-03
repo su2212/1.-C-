@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <wiringPi.h>
+#include <wiringSerial.h>
+#include <wiringPiSPI.h>
+
+#define CS_MCP3208 10
+#define SPI_CHANNEL 0
+#define SPI_SPEED 1000000 //1MHz
+
+unsigned char adcChannel;
+char arr[100]; 	//버퍼
+int fd, save;
+int adcValue = 0;
+
+void setSPI(void)
+{
+	pinMode(CS_MCP3208, OUTPUT);
+	digitalWrite(CS_MCP3208, 1);  // HIGH : CS Inactive
+}
+
+int read_mcp3208_adc(unsigned char adcChannel) 
+{
+    unsigned char buff[3];    
+    buff[0] = 0x06 | ((adcChannel & 0x07) >> 2); //start,SGL,D2
+    buff[1] = ((adcChannel & 0x07) << 6);	//D1,D0
+    buff[2] = 0x00;
+    
+    digitalWrite(CS_MCP3208, 0);	//데이터 값을 못받음
+    wiringPiSPIDataRW(SPI_CHANNEL, buff, 3);	//channel,data,len
+
+    buff[1] = 0x0f & buff[1];	//하위4비트를 마스크 후 대입
+    adcValue = (buff[1] << 8 ) | buff[2]; //버퍼 인덱스1번 하위4비트를 8번 시트프 후 버퍼 인덱스2번과 OR 12비트
+    
+    digitalWrite(CS_MCP3208, 1);
+    
+    return adcValue;
+}
+
+int main()
+{	
+	if(wiringPiSetup() == -1)
+	{
+		fprintf(stdout, "Unable to start wiringPi : %s\n", strerror(errno));
+		return 1;
+	}
+	
+	if(wiringPiSPISetup(SPI_CHANNEL, SPI_SPEED) == -1)  
+    {
+        fprintf(stdout, "wiringPiSPISetup Failed :%s\n", strerror(errno));
+        return 1;
+    }
+	if((fd=serialOpen("/dev/ttyS0",9600))<0)				//serial 에러 검사
+	{
+		fprintf(stderr,"Unable to open serial device:%s\n",strerror(errno));
+		return 1;
+	}
+	setSPI();
+	
+	while(1)
+	{
+		save = read_mcp3208_adc(adcChannel); //0번채널
+		sprintf(arr,"SPI Potentiometer : %d",save); //배열 서식 값
+		serialPuts(fd,arr);		   // ADC분해능 12비트 4096까지 출력
+		serialPuts(fd,"\r");       // 줄바꿈
+		fflush(stdout);            // 출력버퍼를 비움                      
+		delay(500);
+	}
+}
