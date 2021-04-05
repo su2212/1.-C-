@@ -1,0 +1,120 @@
+module led166(rst,clk,new_sw,module_led);
+	input rst,clk;
+   input [2:0] new_sw;
+   output [7:0] module_led;
+   
+   
+   reg [7:0] led;
+   reg [7:0] led1;
+	reg [14:0] counter_clk;
+	reg [9:0] counter_clk_1k;
+	reg [9:0] counter_clk_2k;
+	reg clk_1k;
+	reg clk_2k;
+
+
+		  
+	always @(posedge clk or negedge rst) begin		//0.000,000,05 (20MHz)
+		if(!rst) begin
+			counter_clk <= 14'd0;
+		end
+		else begin
+			if(counter_clk >= 14'd10_000) begin  	//0.000,5
+				counter_clk <= 14'd0;
+				clk_1k <= ~clk_1k;					//0.001 (1msec)
+				clk_2k <= ~clk_2k;	
+			end
+			else counter_clk <= counter_clk + 1'b1;
+		end
+	end
+	
+	always @(posedge clk_1k or negedge rst) begin	
+		if(!rst) begin
+			counter_clk_1k <= 10'd0;
+			led<=~8'h00;
+		end
+		else begin
+			if(counter_clk_1k >= 10'd500) begin		//0.5 (0.5sec)		
+				counter_clk_1k <= 10'd0;
+				if(new_sw==~3'b001)begin
+					if (led == ~8'b01010101) led <= ~8'b10101010;
+					else led <= ~8'b01010101;
+				end
+			end
+			else counter_clk_1k <= counter_clk_1k + 1'b1;		
+		end
+	end
+	always @(posedge clk_2k or negedge rst) begin	
+		if(!rst) begin
+			counter_clk_2k <= 10'd0;
+			led<=~8'h00;
+		end
+		else begin
+			if(counter_clk_2k >= 10'd1000) begin		//1sec	
+				counter_clk_2k <= 10'd0;
+				if(new_sw==~3'b011)begin
+					if (led1 == ~8'h00) led1 <= 8'd1;	
+					else led <= led1 <<1;
+				end
+			end
+			else counter_clk_2k <= counter_clk_2k + 1'b1;		
+		end
+	end
+	
+	assign module_led=led;
+endmodule
+
+
+
+module led166(rst,clk,new_sw,module_led);
+	input rst,clk;
+   input [2:0] new_sw;
+   output [7:0] module_led;
+   
+   
+   reg [7:0] led;
+	reg [14:0] counter_clk;
+	reg [9:0] counter_clk_1k;
+	reg clk_1k;
+	
+
+
+		  
+	always @(posedge clk or negedge rst) begin		//0.000,000,05 (20MHz)
+		if(!rst) begin
+			counter_clk <= 14'd0;
+		end
+		else begin
+			if(counter_clk >= 14'd10_000) begin  	//0.000,5
+				counter_clk <= 14'd0;
+				clk_1k <= ~clk_1k;					//0.001 (1msec)
+			end
+			else counter_clk <= counter_clk + 1'b1;
+		end
+	end
+	
+	always @(posedge clk_1k or negedge rst) begin	
+		if(!rst) begin
+			counter_clk_1k <= 10'd0;
+			led<=~8'h00;
+		end
+		else begin
+			if(counter_clk_1k >= 10'd500) begin		//0.5sec		
+				if(new_sw==~3'b001)begin
+					if (led == ~8'b01010101) led <= ~8'b10101010;
+					else led <= ~8'b01010101;
+				end
+			end
+			else if(counter_clk_1k >= 10'd1000) begin  //1sec
+				counter_clk_1k <= 10'd0;
+				if(new_sw==~3'b011)begin
+					if (led == ~8'h00) led <= 8'd1;	
+					else led <= led <<1;
+				end
+			end
+			else counter_clk_1k <= counter_clk_1k + 1'b1;		
+		end
+	end
+
+	assign module_led=led;
+endmodule
